@@ -1,0 +1,102 @@
+version: '3.4'
+services:
+  server:
+    image: zabbix/zabbix-server-mysql
+    hostname: server
+    networks:
+      zabbix:
+        aliases:
+          - server
+    depends_on:
+      - mysql
+      - web
+    environment:
+      - DB_SERVER_HOST=mysql
+      - DB_SERVER_PORT=3306
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=zabbix
+      - MYSQL_DATABASE=zabbix
+      - ZBX_DEBUGLEVEL=3
+    ports:
+      - "10051:10051"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      # - /nfs/zabbix/alertscripts:/usr/lib/zabbix/alertscripts:ro
+      # - /nfs/zabbix/externalscripts:/usr/lib/zabbix/externalscripts:ro
+      # - /nfs/zabbix/modules:/var/lib/zabbix/modules:ro
+      # - /nfs/zabbix/enc:/var/lib/zabbix/enc:ro
+      # - /nfs/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro
+      # - /nfs/zabbix/mibs:/var/lib/zabbix/mibs:ro
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 100m
+
+  web:
+    image: zabbix/zabbix-web-nginx-mysql:ubuntu-3.4.4
+    hostname: web
+    networks:
+      zabbix:
+        aliases:
+          - web
+    depends_on:
+      - mysql
+    environment:
+      - ZBX_SERVER_HOST=server
+      - ZBX_SERVER_PORT=10051
+      - DB_SERVER_HOST=mysql
+      - DB_SERVER_PORT=3306
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=zabbix
+      - MYSQL_DATABASE=zabbix
+      - PHP_TZ=Asia/Shanghai
+      - ZBX_SERVER_NAME=zabbix server
+      - ZBX_MAXEXECUTIONTIME=300
+      - ZBX_MEMORYLIMIT=128M
+      - ZBX_POSTMAXSIZE=16M
+      - ZBX_UPLOADMAXFILESIZE=2M
+      - ZBX_MAXINPUTTIME=300
+    ports:
+        - 81:80/tcp
+        - 444:443/tcp
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      # - /nfs/zabbix/alertscripts:/usr/lib/zabbix/alertscripts:ro
+      # - /nfs/zabbix/externalscripts:/usr/lib/zabbix/externalscripts:ro
+      # - /nfs/zabbix/modules:/var/lib/zabbix/modules:ro
+      # - /nfs/zabbix/enc:/var/lib/zabbix/enc:ro
+      # - /nfs/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro
+      # - /nfs/zabbix/mibs:/var/lib/zabbix/mibs:ro
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 100m
+
+  mysql:
+    image: mysql:5.7.20
+    hostname: mysql
+    networks:
+      zabbix:
+        aliases:
+          - mysql
+    environment:
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=zabbix
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=zabbix
+    volumes:
+      - ./mysql/:/var/lib/mysql
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 100m
+networks:
+  zabbix:
+    external: true
+#    driver: bridge

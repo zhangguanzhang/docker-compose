@@ -1,0 +1,41 @@
+version: "2"
+
+services:
+  nextcloud:
+    image: nextcloud
+    restart: always
+    hostname: nextcloud
+    container_name: nextcloud
+    depends_on:
+      - mysql
+    ports:
+      - "80:80"
+    volumes:
+      - "./data:/var/www/html/data/"
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 20k
+
+  mysql:
+    image: mysql:5.7
+    hostname: mysql
+    container_name: mysql
+    restart: always
+    volumes:
+      - ./mysql:/var/lib/mysql
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: data
+      MYSQL_USER: root
+      MYSQL_PASSWORD: your_passwd
+      MYSQL_ROOT_PASSWORD: yourroot_passwd
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 20k
