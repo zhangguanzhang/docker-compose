@@ -7,6 +7,7 @@ services:
       zabbix:
         aliases:
           - server
+          - zabbix
     depends_on:
       - mysql
       - web
@@ -96,7 +97,23 @@ services:
       options:
         max-file: '3'
         max-size: 100m
+
+  agent:
+    image: zabbix/zabbix-agent:ubuntu-3.4.4
+    networks:
+      zabbix:
+        aliases:
+          - agent
+    environment:
+      - ZBX_HOSTNAME=agent
+      - ZBX_SERVER_HOST=zabbix
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 10m
+
 networks:
   zabbix:
-    external: true
-#    driver: bridge
+#    external: true
+    driver: bridge
