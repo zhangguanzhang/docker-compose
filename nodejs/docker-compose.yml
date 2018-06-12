@@ -29,8 +29,6 @@ services:
       - ./mysql:/var/lib/mysql
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
       - /var/lib/mysql:/var/lib/mysql
-    ports:
-      - "3306:3306"
     environment:
       MYSQL_DATABASE: your_database_name
       MYSQL_USER: your_another_username
