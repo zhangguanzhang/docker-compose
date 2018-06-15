@@ -1,0 +1,40 @@
+version: "2"
+services:
+  web:
+    image: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /etc/nginx/ssl:/etc/nginx/ssl:ro
+      - /data:/data
+    networks:
+      - code-network
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - /data/mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: test
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 123456789
+      MYSQL_ROOT_PASSWORD: 123456789
+    networks:
+      - code-network
+  php:
+    image: php:7.2-fpm
+    volumes:
+      - /data:/data
+    ports:
+      - "9000:9000"
+    environment:
+      TZ: Asia/Shanghai
+    networks:
+      - code-network
+
+networks:
+  code-network:
+    driver: bridge
