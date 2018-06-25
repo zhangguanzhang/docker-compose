@@ -60,7 +60,7 @@ services:
       - ZBX_UPLOADMAXFILESIZE=2M
       - ZBX_MAXINPUTTIME=300
     ports:
-        - 81:80/tcp
+        - 80:80/tcp
         - 444:443/tcp
     volumes:
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
