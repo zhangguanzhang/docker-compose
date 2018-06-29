@@ -78,7 +78,7 @@ services:
         max-size: 100m
 
   mysql:
-    image: mysql:5.7.20
+    image: mysql:5.7.22
     hostname: mysql
     networks:
       zabbix:
