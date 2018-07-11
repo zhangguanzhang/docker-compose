@@ -1,0 +1,76 @@
+version: '3.4'
+services:
+  prometheus:
+    image: prom/prometheus:v2.3.1
+    hostname: prometheus
+    volumes:
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./alert.rules:/etc/prometheus/alert.rules
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    # ports:
+    #   - '9090:9090'
+    networks:
+      prometheus:
+        aliases:
+          - prometheus
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 100m
+
+  node-exporter:
+    image: prom/node-exporter:v0.16.0
+    hostname: exporter
+    volumes:
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/host/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+    # ports:
+    #   - '9100:9100'
+    networks:
+      prometheus:
+        aliases:
+          - exporter
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 100m
+
+  grafana:
+    image: grafana/grafana:5.2.1
+    hostname: grafana
+    volumes:
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=pass
+    depends_on:
+      - prometheus
+    ports:
+      - '3000:3000'
+    networks:
+      prometheus:
+        aliases:
+          - grafana
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 100m
+
+networks:
+  prometheus:
+    driver: bridge
+
+volumes:
+  grafana_data: {}
+  prometheus_data: {}
