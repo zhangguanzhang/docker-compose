@@ -10,5 +10,9 @@ scrape_configs:
       scrape_interval: 10s
       static_configs:
           - targets: ['exporter:9100']
+    - job_name: 'grafana'
+      scrape_interval: 15s
+      static_configs:
+          - targets: ['grafana:3000']
 rule_files:
   - 'alert.rules'
