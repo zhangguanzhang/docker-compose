@@ -1,15 +1,16 @@
 version: '3.4'
 services:
   prometheus:
-    image: prom/prometheus:v2.6.0
+    image: prom/prometheus:v2.19.3
     hostname: prometheus
     volumes:
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - ./alert.rules:/etc/prometheus/alert.rules
-      - prometheus_data:/prometheus
+      - ./prom_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus/'
     ports:
       - '9090:9090'
     networks:
@@ -23,7 +24,7 @@ services:
         max-size: 100m
 
   node-exporter:
-    image: prom/node-exporter:v0.17.0
+    image: prom/node-exporter:v1.0.1
     hostname: exporter
     volumes:
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
@@ -33,6 +34,8 @@ services:
     command:
       - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/host/rootfs'
+      - '--collector.cpu.info'
     ports:
       - '9100:9100'
     networks:
@@ -46,11 +49,11 @@ services:
         max-size: 100m
 
   grafana:
-    image: grafana/grafana:5.4.0
+    image: grafana/grafana:7.1.1
     hostname: grafana
     volumes:
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
-      - grafana_data:/var/lib/grafana
+      - ./grafana_data:/var/lib/grafana
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=pass
     depends_on:
@@ -71,6 +74,6 @@ networks:
   prometheus:
     driver: bridge
 
-volumes:
-  grafana_data: {}
-  prometheus_data: {}
+#volumes:
+#  grafana_data: {}
+#  prometheus_data: {}

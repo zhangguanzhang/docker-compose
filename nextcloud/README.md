@@ -1,3 +1,7 @@
 # docker-compose_nextcloud
-RUN:
-  docker-compose up -d
+
+## RUN
+```
+mkdir data
+docker-compose up -d
+```

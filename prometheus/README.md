@@ -1,5 +1,11 @@
-docker-compose up -d
 
+## RUN
+
+推荐本地目录挂载，由于Prometheus的Dockerfle用户设置的nobody，目录挂载得提前创建并且`chown -R 65534:65534 prom_data`
+
+```
+docker-compose up -d
+```
 GF_SECURITY_ADMIN_PASSWORD=pass 环境变量设置 admin 的密码
 
 起来后访问http://host-ip:3000
