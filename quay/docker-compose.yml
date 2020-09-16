@@ -1,0 +1,75 @@
+version: '3.2'
+services:
+  quay:
+    #image: quay.io/redhat/quay:v3.3.1
+    image: registry.aliyuncs.com/quayxio/redhat-quay:v3.3.1
+    container_name: quay
+    restart: always
+    privileged: true
+    sysctls:
+      - net.core.somaxconn=1024
+    volumes:
+      - /data/quay/config:/conf/stack:Z
+      - /data/quay/storage:/datastorage:Z
+    ports:
+      - 443:8443
+    command: ["config", "redhat"]
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      quay:
+        aliases:
+          - config
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 100m
+  mysql:
+    image: registry.access.redhat.com/rhscl/mysql-57-rhel7
+    container_name: quay-mysql
+    restart: always
+    privileged: true
+    volumes:
+      - /data/quay/lib/mysql:/var/lib/mysql/data:Z
+    # ports:
+    #   - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=redhat
+      - MYSQL_DATABASE=enterpriseregistrydb
+      - MYSQL_USER=quayuser
+      - MYSQL_PASSWORD=redhat
+    networks:
+      quay:
+        aliases:
+          - mysql
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 100m
+
+  redis:
+    image: registry.access.redhat.com/rhscl/redis-32-rhel7
+    container_name: quay-redis
+    restart: always
+    privileged: true
+    volumes:
+      - /data/quay/lib/redis:/var/lib/redis/data:Z
+    networks:
+      quay:
+        aliases:
+          - redis
+    # ports:
+    #   - 6379:6379
+    depends_on:
+      - mysql
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 100m
+networks:
+  quay:
+    external: false

@@ -5,8 +5,8 @@ services:
     hostname: prometheus
     volumes:
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./alert.rules:/etc/prometheus/alert.rules
+      - ./prom_conf:/etc/prometheus
+#      - ./alert.rules:/etc/prometheus/alert.rules
       - ./prom_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'

@@ -2,6 +2,7 @@
 ## RUN
 
 推荐本地目录挂载，由于Prometheus的Dockerfle用户设置的nobody，目录挂载得提前创建并且`chown -R 65534:65534 prom_data`
+配置文件放在`prom_config`目录下, grafana 7的table不强，如果想学old-table panel可以用`6.7.4`
 
 ```
 docker-compose up -d
