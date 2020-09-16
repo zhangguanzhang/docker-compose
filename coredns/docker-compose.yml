@@ -1,0 +1,53 @@
+version: '3.2'
+services:
+  coredns:
+    #image: quay.io/redhat/quay:v3.3.1
+    image: coredns/coredns:1.7.0
+    container_name: coredns
+    restart: always
+    ports:
+      - "53:53/udp"
+      - "53:53/tcp"
+      - "9153:9153/tcp"
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    volumes:
+      - /data/coredns/config/:/etc/coredns/
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/hosts:/etc/hosts:ro
+    command: ["-conf", "/etc/coredns/Corefile"]
+    depends_on:
+      - coredns-etcd
+    networks:
+      coredns:
+        aliases:
+          - coredns
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 100m
+  coredns-etcd:
+    #image: quay.io/coreos/etcd:v3.4.13
+    image: registry.aliyuncs.com/k8sxio/etcd:3.4.13-0
+    container_name: coredns-etcd
+    restart: always
+    volumes:
+      - /data/coredns/etcd/data:/var/lib/etcd:Z
+      - /data/coredns/etcd/conf:/etc/etcd:Z
+      - /etc/localtime:/etc/localtime:ro
+    command: ["/usr/local/bin/etcd", "--config-file=/etc/etcd/etcd.config.yml"]
+    networks:
+      coredns:
+        aliases:
+          - etcd
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 100m
+networks:
+  coredns:
+    external: false
