@@ -1,0 +1,16 @@
+version: '3.4'
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: install-nginx
+    hostname: install-nginx
+    volumes:
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+      - /data/install-nginx/install:/usr/share/nginx/html
+      - /data/install-nginx/conf.d/:/etc/nginx/conf.d/
+    network_mode: "host"
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 100m

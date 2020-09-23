@@ -37,4 +37,5 @@ services:
 
 networks:
   code-network:
+    name: code-network
     driver: bridge

@@ -1,7 +1,6 @@
 version: '3.2'
 services:
   coredns:
-    #image: quay.io/redhat/quay:v3.3.1
     image: coredns/coredns:1.7.0
     container_name: coredns
     restart: always
@@ -16,7 +15,6 @@ services:
     volumes:
       - /data/coredns/config/:/etc/coredns/
       - /etc/localtime:/etc/localtime:ro
-      - /etc/hosts:/etc/hosts:ro
     command: ["-conf", "/etc/coredns/Corefile"]
     depends_on:
       - coredns-etcd
@@ -50,4 +48,5 @@ services:
         max-size: 100m
 networks:
   coredns:
+    name: coredns
     external: false

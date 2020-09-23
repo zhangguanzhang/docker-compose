@@ -115,5 +115,6 @@ services:
 
 networks:
   zabbix:
+    name: zabbix
 #    external: true
     driver: bridge

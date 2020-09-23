@@ -43,4 +43,5 @@ services:
         max-file: '3'
 networks:
   code-network:
+    name: code-network
     driver: bridge
