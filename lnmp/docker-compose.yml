@@ -34,7 +34,9 @@ services:
       TZ: Asia/Shanghai
     networks:
       - code-network
-
+    depends_on:
+      - web
+      - mysql
 networks:
   code-network:
     name: code-network

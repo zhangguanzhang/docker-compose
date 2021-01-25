@@ -1,0 +1,83 @@
+version: '3.4'
+services:
+  consul-node1:
+    image: consul:1.8
+    hostname: consul-node1
+    container_name: consul-node1
+    volumes:
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+      - ./data/node1:/consul/data
+      - ./conf/server-conf:/opt/
+      - ./cert:/etc/cert/
+    command:
+      - agent 
+      - -server
+      - -config-dir=/opt/
+    # ports:
+    #   - '9090:9090'
+    env_file:
+      - ./conf/consul.env
+    networks:
+      consul:
+        aliases:
+          - node1
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 100m
+
+  consul-node2:
+    image: consul:1.8
+    hostname: consul-node2
+    container_name: consul-node2
+    volumes:
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+      - ./data/node2:/consul/data
+      - ./conf/server-conf:/opt/
+      - ./cert:/etc/cert/
+    command:
+      - agent 
+      - -server
+      - -config-dir=/opt/
+    env_file:
+      - ./conf/consul.env
+    networks:
+      consul:
+        aliases:
+          - node2
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 100m
+
+  consul-node3:
+    image: consul:1.8
+    hostname: consul-node3
+    container_name: consul-node3
+    volumes:
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+      - ./data/node3:/consul/data
+      - ./conf/server-conf:/opt/
+      - ./cert:/etc/cert/
+    command:
+      - agent 
+      - -server
+      - -config-dir=/opt/
+    env_file:
+      - ./conf/consul.env
+    networks:
+      consul:
+        aliases:
+          - node3
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 100m
+
+networks:
+  consul:
+    driver: bridge
+

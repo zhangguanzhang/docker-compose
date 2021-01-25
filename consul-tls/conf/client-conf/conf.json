@@ -1,0 +1,26 @@
+{
+    "data_dir": "/consul/data",
+    "datacenter": "dc1",
+    "bind_addr": "172.19.0.8",
+    "client_addr": "0.0.0.0",
+    "start_join": [
+        "node1",
+        "node2",
+        "node3"
+    ],
+    "retry_interval": "3s",
+    "rejoin_after_leave": true,
+    "enable_script_checks": true,
+    "verify_incoming": true,
+    "ca_file": "/etc/cert/consul-agent-ca.pem",
+    "cert_file": "/etc/cert/dc1-client-consul-0.pem",
+    "key_file": "/etc/cert/dc1-client-consul-0-key.pem",
+    "auto_encrypt": {
+       "tls": true
+     },
+     "ports": {
+       "http": -1,
+       "dns": 8600,
+       "https": 8501
+     }
+}
