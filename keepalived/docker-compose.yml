@@ -1,0 +1,46 @@
+version: '3.2'
+services:
+  keepalived:
+    image: registry.aliyuncs.com/zhangguanzhang/keepalived:v2.0.20
+    container_name: keepalived
+    restart: always
+    network_mode: host
+    privileged: true
+    sysctls:
+      - net.core.somaxconn=2000
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    volumes:
+      - ./conf/:/etc/keepalived/
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/hosts:/etc/hosts:ro
+    #command: ["-f", "/etc/haproxy/haproxy.cfg"]
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 100m
+
+  dummy:
+    image: registry.aliyuncs.com/zhangguanzhang/dummy-tool:v0.1
+    hostname: dummy
+    restart: always
+    container_name: wps-dummy
+    network_mode: host
+    privileged: true
+    volumes:
+        - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+    command: 
+    - -local-ip=169.254.20.10
+    - -check-interval=5s
+    - -health-port=
+    - -interface-name=nodelocaldns
+    - -setup-interface
+    - -exit-remove=false
+    logging:
+        driver: json-file
+        options:
+        max-file: '3'
+        max-size: 7m
