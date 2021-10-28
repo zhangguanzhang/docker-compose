@@ -1,0 +1,18 @@
+version: '3.3'
+services:
+  aliyundrive-webdav:
+    container_name: aliyundrive-webdav
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - 'REFRESH_TOKEN=xxxxxx'
+      - HOST=0.0.0.0
+      - PORT=8080
+      - WEBDAV_AUTH_USER=root
+      - WEBDAV_AUTH_PASSWORD=root
+    image: messense/aliyundrive-webdav
+    command: 
+      - /usr/bin/aliyundrive-webdav
+      - --auto-index
+      - --root=/person/life/Game/EmuELEC/roms
+      - --cache-ttl=10

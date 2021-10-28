@@ -1,0 +1,40 @@
+version: '3.5'
+services:
+  registry: # port: tcp/5000
+    image: registry:2.8
+    hostname: registry
+    restart: always
+    container_name: registry
+    network_mode: host
+    depends_on:
+      - registry-pass
+    volumes:
+      - ./auth:/auth/
+      - ./data:/var/lib/registry
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+    environment:
+      REGISTRY_HTTP_ADDR: "0.0.0.0:5000"
+      REGISTRY_AUTH:   htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: "Registry Realm"
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+    logging:
+      driver: json-file
+      options:
+        max-file: '5'
+        max-size: 20m
+
+  registry-pass:
+    image: xmartlabs/htpasswd:latest
+    hostname: registry-pass
+    container_name: registry-pass
+    network_mode: none
+    entrypoint: ["sh", "-c"]
+    command: ["htpasswd -Bbn admin test > /opt/htpasswd"]
+    volumes:
+      - ./auth:/opt/
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 2m

@@ -1,7 +1,7 @@
 version: '3.2'
 services:
   coredns:
-    image: coredns/coredns:1.7.0
+    image: coredns/coredns:1.8.7
     container_name: coredns
     restart: always
     ports:

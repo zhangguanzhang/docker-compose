@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  webdav:
+    container_name: webdav
+    image: registry.aliyuncs.com/zhangguanzhang/webdav
+    #image: zhangguanzhang/webdav
+    volumes:
+      - "/usr/share/zoneinfo/Asia/Shanghai:/etc/localtime"
+      - "./conf:/etc/webdav/"
+      - "/data/download:/data/download"
+    network_mode: host
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 7m
