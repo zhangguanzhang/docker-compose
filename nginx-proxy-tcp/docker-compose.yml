@@ -1,0 +1,17 @@
+version: '3.4'
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: proxy
+    hostname: proxy
+    volumes:
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./conf.d/:/etc/nginx/conf.d/
+      - ./stream.d/:/etc/nginx/stream.d/
+    network_mode: "host"
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 100m
