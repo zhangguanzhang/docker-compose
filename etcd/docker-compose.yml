@@ -1,0 +1,21 @@
+version: '3'
+services:
+  etcd:
+    #image: quay.io/coreos/etcd:v3.4.13
+    image: registry.aliyuncs.com/k8sxio/etcd:v3.5.4
+    container_name: etcd
+    network_mode: bridge
+    ports:
+      - '2379:2379'
+    #  - '2380:2380'
+    restart: unless-stopped
+    volumes:
+      - ./data:/var/lib/etcd:Z
+      - ./conf:/etc/etcd:Z
+      - /etc/localtime:/etc/localtime:ro
+    command: ["/usr/local/bin/etcd", "--config-file=/etc/etcd/etcd.config.yml"]
+    logging:
+      driver: json-file
+      options:
+        max-file: '3'
+        max-size: 30
