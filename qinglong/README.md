@@ -34,7 +34,7 @@ the command could get from [fakaer2](https://github.com/shufflewzc/faker2.git) .
 
 ### 登录
 
-chrome browser go to `bean.m.jd.com` get cookies: `xx_key` and `xx_pin` , go to the dashboard add envirment `JD_COOKIE`, value is `xx_key=xxx;xx_pin=xxx`
+chrome browser go to `m.jd.com` get cookies: `xx_key` and `xx_pin` , go to the dashboard add envirment `JD_COOKIE`, value is `xx_key=xxx;xx_pin=xxx`
 
 ## 问题
 
