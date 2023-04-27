@@ -34,7 +34,65 @@ the command could get from [fakaer2](https://github.com/shufflewzc/faker2.git) .
 
 ### 登录
 
-chrome browser go to `m.jd.com` get cookies: `xx_key` and `xx_pin` , go to the dashboard add envirment `JD_COOKIE`, value is `xx_key=xxx;xx_pin=xxx`
+chrome browser go to `m.jd.com plogin.m.jd.com` get cookies: `xx_key` and `xx_pin` , go to the dashboard add envirment `JD_COOKIE`, value is `xx_key=xxx;xx_pin=xxx`
+
+## 依赖
+
+NodeJs 里面所需依赖 添加依赖》选择自动拆分，把以下内容全部复制到名称里，之后点击确定
+
+```
+ts-md5
+@types/node
+prettytable
+node-telegram-bot-api
+tslib
+ql
+common
+fs
+typescript
+axios
+png-js
+axios
+ws@7.4.3
+crypto-js
+jieba
+global-agent
+jsdom -g
+moment
+form-data
+date-fns
+node-jsencrypt
+require
+js-base64
+tough-cookie
+json5
+jsdom
+dotenv
+qs
+```
+
+Python3 依赖 添加依赖》选择自动拆分，把以下内容全部复制到名称里，之后点击确定
+
+```
+ping3
+canvas
+requests
+jieba
+PyExecJS
+httpx
+```
+
+Linux 依赖 添加依赖》选择自动拆分，把以下内容全部复制到名称里，之后点击确定
+
+```
+lxml
+bizMsg
+bizCode
+gcc
+python-devel
+aiohttp
+magic
+```
 
 ## 问题
 

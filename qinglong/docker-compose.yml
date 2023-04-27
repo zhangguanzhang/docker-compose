@@ -7,16 +7,5 @@ services:
     tty: true
     ports:
       - 5700:5700
-      - 5701:5701
-    environment:
-      - ENABLE_HANGUP=true
-      - ENABLE_WEB_PANEL=true
     volumes:
-      - ./qinglong/config:/ql/config
-      - ./qinglong/log:/ql/log
-      - ./qinglong/db:/ql/db
-      - ./qinglong/repo:/ql/repo
-      - ./qinglong/raw:/ql/raw
-      - ./qinglong/scripts:/ql/scripts
-      - ./qinglong/jbot:/ql/jbot
-      - ./qinglong/ninja:/ql/ninja
+      - ./qinglong/:/ql/data
