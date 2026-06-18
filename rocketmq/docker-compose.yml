@@ -1,0 +1,69 @@
+services:
+  namesrv:
+    image: m.daocloud.io/docker.io/apache/rocketmq:5.5.0
+    container_name: rmqnamesrv
+    restart: unless-stopped
+    # ports:
+    #   - 9876:9876
+    networks:
+      - rocketmq
+    command: sh mqnamesrv
+
+  broker:
+    image: m.daocloud.io/docker.io/apache/rocketmq:5.5.0
+    container_name: rmqbroker
+    restart: unless-stopped
+    # ports:
+    #   - 10909:10909
+    #   - 10911:10911
+    #   - 10912:10912
+    volumes:
+      - ./rocketmq_data/broker/logs:/home/rocketmq/logs
+      - ./rocketmq_data/broker/store:/home/rocketmq/store
+      - ./conf/broker.conf:/opt/conf/broker.conf
+    environment:
+      - NAMESRV_ADDR=rmqnamesrv:9876
+    depends_on:
+      - namesrv
+    networks:
+      - rocketmq
+    command: sh mqbroker -c /opt/conf/broker.conf
+
+  proxy:
+    image: m.daocloud.io/docker.io/apache/rocketmq:5.5.0
+    container_name: rmqproxy
+    restart: on-failure
+    networks:
+      - rocketmq
+    depends_on:
+      - broker
+      - namesrv
+    ports:
+      - 8080:8080
+      - 8081:8081
+    environment:
+      - NAMESRV_ADDR=rmqnamesrv:9876
+    command: sh mqproxy
+
+  # RocketMQ 控制台
+  rocketmq-dashboard:
+    image: apacherocketmq/rocketmq-dashboard:latest
+    container_name: rocketmq-dashboard
+    ports:
+      - "8088:8082"
+    networks:
+      - rocketmq
+    environment:
+     # 配置 NameServer 地址
+      JAVA_OPTS: >-
+        -Drocketmq.namesrv.addr=rmqnamesrv:9876
+        -Drocketmq.config.accessKey=rocketmq2
+        -Drocketmq.config.secretKey=12345678
+    depends_on:
+      - namesrv
+      - broker
+    restart: always
+
+networks:
+  rocketmq:
+    driver: bridge

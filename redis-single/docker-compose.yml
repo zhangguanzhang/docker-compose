@@ -1,0 +1,11 @@
+services:
+  redis:
+    image: m.daocloud.io/docker.io/library/redis:6.2-bookworm
+    network_mode: host
+    container_name: redis
+    restart: unless-stopped
+    command:
+      - --requirepass your_password_here
+      - --appendonly yes
+    volumes:
+      - ./redis_data:/data

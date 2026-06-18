@@ -1,0 +1,22 @@
+services:
+  seaweedfs:
+    image: chrislusf/seaweedfs:4.34
+    container_name: seaweedfs
+    restart: unless-stopped
+    ports:
+      #- "9333:9333"   # master UI
+      #- "8888:8888"   # filer UI/API
+      - "8333:8333"   # S3/OSS compatible API
+    volumes:
+      - ./seaweedfs_data:/data
+      - ./config/s3-config.json:/etc/seaweedfs/s3-config.json:ro
+    command: >
+      server
+      -master
+      -volume
+      -filer
+      -s3
+      -dir=/data
+      -s3.config=/etc/seaweedfs/s3-config.json
+      -ip=seaweedfs
+      -ip.bind=0.0.0.0

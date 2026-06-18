@@ -1,0 +1,34 @@
+{
+  "identities": [
+    {
+      "name": "admin",
+      "credentials": [
+        {
+          "accessKey": "oss-admin",
+          "secretKey": "oss-admin-secret-123456"
+        }
+      ],
+      "actions": [
+        "Admin",
+        "Read",
+        "List",
+        "Tagging",
+        "Write"
+      ]
+    },
+    {
+      "name": "app01",
+      "credentials": [
+        {
+          "accessKey": "app01",
+          "secretKey": "app01-secret-123456"
+        }
+      ],
+      "actions": [
+        "Read",
+        "List",
+        "Write"
+      ]
+    }
+  ]
+}

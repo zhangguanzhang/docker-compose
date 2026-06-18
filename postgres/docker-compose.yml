@@ -1,0 +1,11 @@
+services:
+  postgres:
+    image: m.daocloud.io/docker.io/library/postgres:18.4-bookworm
+    network_mode: host
+    container_name: postgresql
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: changeme
+      POSTGRES_PASSWORD: changeme
+    volumes:
+      - ./pg_data:/var/lib/postgresql/
